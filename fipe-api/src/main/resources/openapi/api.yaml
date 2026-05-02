@@ -1,0 +1,77 @@
+openapi: 3.0.3
+info:
+  title: Fipe API
+  description: |
+    API-1: orquestrador REST do catálogo FIPE.
+    Dispara a carga das marcas e expõe consultas/atualizações
+    do catálogo persistido pela API-2.
+  version: 0.0.1
+
+servers:
+  - url: http://localhost:8080
+
+tags:
+  - name: carga
+    description: Carga e sincronização do catálogo FIPE.
+
+paths:
+  /carga-inicial:
+    post:
+      tags: [carga]
+      summary: Dispara a carga inicial das marcas
+      operationId: dispararCargaInicial
+      description: |
+        Busca todas as marcas no serviço da FIPE e publica na fila para a API-2
+        processar os modelos. O processamento dos modelos é assíncrono.
+      responses:
+        '202':
+          description: Aceita. Modelos serão processados pela API-2.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CargaInicialResposta'
+        '502':
+          description: Falha ao consultar a FIPE.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+        '503':
+          description: Fila indisponível.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+
+components:
+  schemas:
+    CargaInicialResposta:
+      type: object
+      required: [cargaId, iniciadoEm, marcasEncontradas]
+      properties:
+        cargaId:
+          type: string
+          format: uuid
+        iniciadoEm:
+          type: string
+          format: date-time
+        marcasEncontradas:
+          type: integer
+          minimum: 0
+          description: Total de marcas lidas da FIPE e publicadas na fila.
+
+    # https://www.rfc-editor.org/rfc/rfc7807
+    ProblemDetail:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        instance:
+          type: string
