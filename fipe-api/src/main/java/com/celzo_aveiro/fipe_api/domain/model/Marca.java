@@ -18,4 +18,21 @@ public record Marca(String codigoFipe, String nome) {
         codigoFipe = codigoFipe.trim();
         nome = nome.trim();
     }
+
+    public static Marca of(String codigoFipe, String nome) {
+        return new Marca(codigoFipe, nome);
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+        return other instanceof Marca marca && codigoFipe.equals(marca.codigoFipe);
+    }
+
+    @Override
+    public int hashCode() {
+        return codigoFipe.hashCode();
+    }
 }

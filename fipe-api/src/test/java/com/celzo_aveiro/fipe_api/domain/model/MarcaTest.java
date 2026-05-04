@@ -22,12 +22,32 @@ class MarcaTest {
     }
 
     @Test
+    @DisplayName("cria marca pela factory")
+    void criaPelaFactory() {
+        var marca = Marca.of("59", "Honda");
+
+        assertThat(marca.codigoFipe()).isEqualTo("59");
+        assertThat(marca.nome()).isEqualTo("Honda");
+    }
+
+    @Test
     @DisplayName("normaliza espaços nas bordas")
     void normalizaEspacosNasBordas() {
         var marca = new Marca("  59  ", "  Honda  ");
 
         assertThat(marca.codigoFipe()).isEqualTo("59");
         assertThat(marca.nome()).isEqualTo("Honda");
+    }
+
+    @Test
+    @DisplayName("considera marcas com mesmo código FIPE como iguais")
+    void consideraMesmoCodigoFipeComoIgual() {
+        var honda = new Marca("59", "Honda");
+        var hondaComOutroNome = new Marca("59", "Honda Automoveis");
+
+        assertThat(honda)
+                .isEqualTo(hondaComOutroNome)
+                .hasSameHashCodeAs(hondaComOutroNome);
     }
 
     @ParameterizedTest
