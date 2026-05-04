@@ -1,0 +1,17 @@
+target/
+.git/
+.gitignore
+.gitattributes
+
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+
+HELP.md
+README.md
+.DS_Store
+
+# evita copiar o jar do wrapper baixado em build local
+.mvn/wrapper/maven-wrapper.jar
