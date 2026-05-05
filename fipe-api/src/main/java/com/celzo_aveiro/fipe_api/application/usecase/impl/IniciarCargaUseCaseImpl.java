@@ -4,12 +4,14 @@ import com.celzo_aveiro.fipe_api.application.dto.CargaInicialResponse;
 import com.celzo_aveiro.fipe_api.application.port.out.FipeMarcaClient;
 import com.celzo_aveiro.fipe_api.application.port.out.MarcaMessagePublisher;
 import com.celzo_aveiro.fipe_api.application.usecase.IniciarCargaUseCase;
+import org.springframework.stereotype.Service;
 
 import java.time.Clock;
 import java.time.Instant;
 import java.util.Objects;
 import java.util.UUID;
 
+@Service
 public class IniciarCargaUseCaseImpl implements IniciarCargaUseCase {
 
     private final FipeMarcaClient fipeMarcaClient;

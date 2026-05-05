@@ -15,7 +15,7 @@ tags:
     description: Carga e sincronização do catálogo FIPE.
 
 paths:
-  /carga-inicial:
+  /api/v1/carga-inicial:
     post:
       tags: [carga]
       summary: Dispara a carga inicial das marcas
