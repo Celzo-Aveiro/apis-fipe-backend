@@ -55,6 +55,13 @@ fipe:
     exchange: fipe.exchange
     marcas-queue: fipe.marcas.queue
     marcas-routing-key: fipe.marcas
+  security:
+    admin:
+      username: ${ADMIN_USERNAME:admin}
+      password: ${ADMIN_PASSWORD:admin123}
+    jwt:
+      secret: ${JWT_SECRET:troque-este-segredo-pelo-menos-32-bytes-em-producao}
+      ttl-seconds: ${JWT_TTL_SECONDS:3600}
 
 logging:
   level:
