@@ -1,0 +1,22 @@
+# PDFs do enunciado / material da empresa
+*.pdf
+
+# Build artifacts
+target/
+build/
+
+# IntelliJ
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

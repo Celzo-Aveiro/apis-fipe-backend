@@ -58,6 +58,68 @@ services:
     networks:
       - fipe-net
 
+  fipe-api:
+    build:
+      context: ./fipe-api
+    container_name: fipe-api
+    restart: unless-stopped
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: ${POSTGRES_DB:-fipe}
+      DB_USER: ${POSTGRES_USER:-fipe}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-fipe}
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: ${RABBITMQ_USER:-fipe}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:-fipe}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      JWT_SECRET: ${JWT_SECRET:-troque-este-segredo-pelo-menos-32-bytes-em-producao}
+      JWT_TTL_SECONDS: ${JWT_TTL_SECONDS:-3600}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin123}
+    ports:
+      - "${API_PORT:-8080}:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      fipe-api-consumer:
+        condition: service_started
+    networks:
+      - fipe-net
+
+  fipe-api-consumer:
+    build:
+      context: ./fipe-api-consumer
+    container_name: fipe-api-consumer
+    restart: unless-stopped
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: ${POSTGRES_DB:-fipe}
+      DB_USER: ${POSTGRES_USER:-fipe}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-fipe}
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: ${RABBITMQ_USER:-fipe}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:-fipe}
+    ports:
+      - "${CONSUMER_PORT:-8081}:8081"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - fipe-net
+
 volumes:
   postgres-data:
   rabbitmq-data:
