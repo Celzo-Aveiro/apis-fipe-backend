@@ -1,9 +1,10 @@
-package com.celzo_aveiro.fipe_api.infrastructure.messaging;
+package com.celzo_aveiro.fipe_api_consumer.infrastructure.messaging;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.support.converter.DefaultJackson2JavaTypeMapper;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,14 +40,16 @@ public class RabbitMqConfig {
 
     @Bean
     Binding marcasBinding(Queue marcasQueue, DirectExchange fipeExchange) {
-        return BindingBuilder
-                .bind(marcasQueue)
-                .to(fipeExchange)
-                .with(marcasRoutingKey);
+        return BindingBuilder.bind(marcasQueue).to(fipeExchange).with(marcasRoutingKey);
     }
 
     @Bean
     MessageConverter jacksonMessageConverter() {
-        return new Jackson2JsonMessageConverter();
+        var converter = new Jackson2JsonMessageConverter();
+        var typeMapper = new DefaultJackson2JavaTypeMapper();
+        typeMapper.setTrustedPackages("*");
+        typeMapper.setTypePrecedence(DefaultJackson2JavaTypeMapper.TypePrecedence.INFERRED);
+        converter.setJavaTypeMapper(typeMapper);
+        return converter;
     }
 }

@@ -30,8 +30,9 @@ spring:
     password: ${RABBITMQ_PASSWORD:fipe}
     listener:
       simple:
-        acknowledge-mode: manual
+        acknowledge-mode: auto
         prefetch: 5
+        default-requeue-rejected: false
         retry:
           enabled: true
           initial-interval: 2s
