@@ -32,12 +32,16 @@ import java.nio.charset.StandardCharsets;
 public class SecurityConfig {
 
     private static final String[] ENDPOINTS_PUBLICOS = {
-            "/auth/token",
-            "/actuator/health",
-            "/actuator/info",
+            "/auth/**",
+            "/actuator/**",
+            "/error",
             "/swagger-ui.html",
             "/swagger-ui/**",
-            "/v3/api-docs/**"
+            "/swagger-resources/**",
+            "/webjars/**",
+            "/v3/api-docs",
+            "/v3/api-docs/**",
+            "/v3/api-docs.yaml"
     };
 
     @Bean
